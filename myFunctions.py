@@ -1,6 +1,8 @@
 from PIL import Image, ImageDraw
 import numpy as np
 
+'''funciones utilizadas para experimentar y hacer debugging'''
+
 def circleWithPoint(drawObject, point, rad, F = None, OT = None, W = 1):
     drawObject.rounded_rectangle([point, (point[0] + rad,point[1] + rad)], radius=rad/2, fill=F, outline=OT, width=W)
     return None
