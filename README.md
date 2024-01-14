@@ -14,7 +14,7 @@ Este script toma una carpeta que tiene la siguiente estructura:
 
 una imagen a la que se desean transformar (*SOURCE IMAGE*) y otra del subject (*SUBJECT_IMAGE*)
   
-El script encuentra una homografia entre las imagenes de la carpeta y el source, las transformas y las guarda en la carpeta deseada
+El script  [EveryDayPic](EvrydayPic.py) encuentra una homografia entre las imagenes de la carpeta y el source, las transformas y las guarda en la carpeta deseada
 
 Se recomienda dar un vistazo a los recursos dejados en *sources.md* pues allí se explican como se usan las funciones de openCV y face recognition, además se dan ejemplo utiles.
 
