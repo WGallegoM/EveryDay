@@ -32,6 +32,8 @@ for mth in MONTHS:
         ImageNames.append(entry.stem)
         numberImages += 1
 
+    ImageNames.sort()
+    
     # Carga los rostos que conoce y saca los encodings 
     subject_image = face_recognition.load_image_file(SOURCE_IMAGE)
     subject_encoding = face_recognition.face_encodings(subject_image)[0]
@@ -55,10 +57,10 @@ for mth in MONTHS:
     con los las landmarks y locations del subject en esa imagen'''
     print('Loading images...')
     images_to_compare = [face_recognition.load_image_file(ROOT_FOLDER + imName + EXTENSION) for imName in ImageNames] #Array de imagenes
-    print('extracting info of the subject in the images...')
-    image_info = [evday.get_Subject_Info(im,subject_encoding,modelSize=MODEL_SIZE) for im in images_to_compare] #Array de diccionarios con landmarks y locations
 
     #output_images = np.empty((numberImages,3000,4000,2),dtype=np.uint8)
+
+    image_info = [None for i in range(numberImages)] #declaracion de image info
 
     #cambia la imagen source a BGR
     print('changing color of SOURCE')
@@ -66,7 +68,8 @@ for mth in MONTHS:
 
     print('processing images...')
     for i in range(numberImages):
-        print('processing image {}'.format(i))
+        print('processing image {0} -> {1}'.format(i,str(ImageNames[i]) ) )
+        image_info[i] = evday.get_Subject_Info(images_to_compare[i],subject_encoding,modelSize=MODEL_SIZE) #Array de diccionarios con landmarks y locations
         #cambia la i-esima imagen a BGR
         images_to_compare[i] = cv2.cvtColor(images_to_compare[i], cv2.COLOR_RGB2BGR)
         #Halla la homografia entre las dos fotos
