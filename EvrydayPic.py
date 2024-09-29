@@ -1,21 +1,23 @@
 import cv2
 import face_recognition
 import everydayUtilities as evday
+import configPriv
 from pathlib import Path
 
 '''CONFIGURACIONES DEL SCRIPT'''
-WRITE_BLEND = True #si el valor es TRUE se guarda una imagen que mezcla el source y el objetivo
-MODEL_SIZE = "large" #tamaño de los landmarks small/large
-SOURCE_IMAGE = '/home/user/Media/evry day photo/sources/19_11_2023_H14-45-21.jpg'
-EXTENSION = '.jpg'
+WRITE_BLEND = configPriv.WRITE_BLEND #si el valor es TRUE se guarda una imagen que mezcla el source y el objetivo
+MODEL_SIZE = configPriv.MODEL_SIZE #tamaño de los landmarks small/large
+SOURCE_IMAGE = configPriv.SOURCE_IMAGE
+ROOT_FOLDER_PATH = configPriv.ROOT_FOLDER_PATH
+EXTENSION = configPriv.EXTENSION
 
 MONTHS = [
-    '05 - Mayo'
+    '03 - Marzo'
 ]
 
 for mth in MONTHS:
     print('PROCESANDO {}'.format(mth))
-    ROOT_FOLDER = '/home/user/Media/evry day photo/2021/' + mth + '/'
+    ROOT_FOLDER = ROOT_FOLDER_PATH + mth + '/'
     OUTPUT_FOLDER = ROOT_FOLDER + 'warped/'
 
     #Imagenes a comparar
@@ -31,7 +33,7 @@ for mth in MONTHS:
         numberImages += 1
 
     # Carga los rostos que conoce y saca los encodings 
-    subject_image = face_recognition.load_image_file("known/subject.jpg")
+    subject_image = face_recognition.load_image_file(SOURCE_IMAGE)
     subject_encoding = face_recognition.face_encodings(subject_image)[0]
 
     knownFaces = [
