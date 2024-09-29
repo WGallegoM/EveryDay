@@ -48,6 +48,10 @@ def get_Subject_Info(image,subjectEncoding,modelSize='large',returnEncoding = Fa
     image_locations = face_recognition.face_locations(image)
     image_encodings = face_recognition.face_encodings(image,image_locations)
     image_landmarks = face_recognition.face_landmarks(image,image_locations,model=modelSize)
+
+    if (not image_locations):
+        print("no se encontro en subject en la imagen")
+        return None
     
     '''se toma el indice del rostro que mejor representa a Subject'''
     subjectIndex = get_Subject_Index(image_encodings,subjectEncoding)

@@ -12,7 +12,7 @@ ROOT_FOLDER_PATH = configPriv.ROOT_FOLDER_PATH
 EXTENSION = configPriv.EXTENSION
 
 MONTHS = [
-    '03 - Marzo'
+    '09-Septiembre'
 ]
 
 for mth in MONTHS:
@@ -33,7 +33,7 @@ for mth in MONTHS:
         numberImages += 1
 
     ImageNames.sort()
-    
+
     # Carga los rostos que conoce y saca los encodings 
     subject_image = face_recognition.load_image_file(SOURCE_IMAGE)
     subject_encoding = face_recognition.face_encodings(subject_image)[0]
@@ -70,13 +70,16 @@ for mth in MONTHS:
     for i in range(numberImages):
         print('processing image {0} -> {1}'.format(i,str(ImageNames[i]) ) )
         image_info[i] = evday.get_Subject_Info(images_to_compare[i],subject_encoding,modelSize=MODEL_SIZE) #Array de diccionarios con landmarks y locations
+        
+        if (image_info[i] == None):
+            print("No se pudo encontrar al subject en la imagen {0} -> {1}".format(i,str(ImageNames[i])))            
+            continue
         #cambia la i-esima imagen a BGR
         images_to_compare[i] = cv2.cvtColor(images_to_compare[i], cv2.COLOR_RGB2BGR)
         #Halla la homografia entre las dos fotos
         h, status = cv2.findHomography(image_info[i]['landmarks'],source_info['landmarks'])
         #hace el cambio de perspectiva de la imagen
         im_out = cv2.warpPerspective(images_to_compare[i], h, (source_info['image'].shape[1],source_info['image'].shape[0]))
-        #output_images.append(im_out)
 
         cv2.imwrite(OUTPUT_FOLDER + ImageNames[i] + '-warped' + '.jpg',im_out)
 
