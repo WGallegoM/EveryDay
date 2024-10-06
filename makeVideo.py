@@ -1,58 +1,68 @@
-import numpy as np
 import cv2
-from pathlib import Path
 import re
+import config
+from pathlib import Path
 
-#TODO organizar fotos a la hora de hacer el video
+NAME = config.NAME
+FPS = config.FPS
+RESOLUTION = config.RESOLUTION
+MONTH_EXPRESSION = config.month_expression
+ROOT_PATH = config.ROOT_FOLDER_PATH
+TEXT = config.TEXT
+COLOR_TEXT = config.COLOR_TEXT
+FONT = cv2.FONT_HERSHEY_SIMPLEX 
 
-ROOT_PATH = '/home/willgm/STUFF/Media/evry day photo/'
 YEARS = [
     '2021/',
     '2022/',
-    '2023/'
-    #'2024/'
+    '2023/',
+    '2024/'
 ]
-
-MONTHS = [
-    '01 - Enero',
-    '02 - Febrero',
-    '03 - Marzo',
-    '04 - Abril',
-    '05 - Mayo',
-    '06 - Junio',
-    '07 - Julio',
-    '08 - Agosto',
-    '09 - Septiembre',
-    '10 - Octubre',
-    '11 - Noviembre',
-    '12 - Diciembre'
-]
-
-listImages = []
 
 # Define the codec and create VideoWriter object
 fourcc = cv2.VideoWriter_fourcc(*'XVID')
-out = cv2.VideoWriter('output.avi',fourcc, 24.0, (1440,1080))
+out = cv2.VideoWriter(NAME + '.avi',fourcc, FPS, RESOLUTION)
 
-for im in listImages:
-    frame = cv2.imread(ROOT_PATH + im + '.jpg')
-    out.write(frame)
+number_photos = 0
+
+COLOR_TEXT = (COLOR_TEXT[2] , COLOR_TEXT[1], COLOR_TEXT[0]) # cambia el color de RGB a BGR
 
 for year in YEARS:
-    mth_list = []
+    Path_year = Path(ROOT_PATH + year)
+    monthsAvalible = [x.stem for x in Path_year.iterdir() if (x.is_dir() and re.match(MONTH_EXPRESSION,x.stem))] #agrega a una lista solo los nombres de las carpetas que tengan la forma y nombre de un mes
+    monthsAvalible.sort()
+
     print("\nPROCESANDO {} ...\m".format(year))
-    for mth in MONTHS:
+
+    for mth in monthsAvalible:
         print("\nPROCESANDO {} ...\n".format(mth))
         mthPath = ROOT_PATH + year + mth + '/warped/'
         entries = Path(mthPath)
-        for entry in entries.iterdir():
-            
+
+        if not(entries.exists()): # si la carpeta warped no existe se salta el mes
+            print(r'there is no "warped" folder for this month')
+            continue 
+        
+        sortedEntries = sorted(entries.iterdir())
+        for entry in sortedEntries:
             if (entry.suffix != '.jpg') or not(bool(re.search(r'warped$', entry.stem))):
                 continue
+            number_photos += 1
 
-            print("adding {} to the video".format(entry.stem))
+            print("adding pic #{} {} to the video {}".format(str(number_photos),entry.stem,NAME))
 
             frame = cv2.imread(str(entry))
+
+            if TEXT:
+                cv2.putText(frame,  
+                entry.stem,  
+                (RESOLUTION[0] - 200 , RESOLUTION[1] - 30),  
+                FONT, 1,  
+                COLOR_TEXT,  # el color esta en BGR
+                2,  
+                cv2.LINE_4,
+                ) 
+
             out.write(frame)
             
 

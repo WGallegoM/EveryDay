@@ -1,15 +1,15 @@
 import cv2
 import face_recognition
 import everydayUtilities as evday
-import configPriv
+import config
 from pathlib import Path
 
 '''CONFIGURACIONES DEL SCRIPT'''
-WRITE_BLEND = configPriv.WRITE_BLEND #si el valor es TRUE se guarda una imagen que mezcla el source y el objetivo
-MODEL_SIZE = configPriv.MODEL_SIZE #tamaño de los landmarks small/large
-SOURCE_IMAGE = configPriv.SOURCE_IMAGE
-ROOT_FOLDER_PATH = configPriv.ROOT_FOLDER_PATH
-EXTENSION = configPriv.EXTENSION
+WRITE_BLEND = config.WRITE_BLEND #si el valor es TRUE se guarda una imagen que mezcla el source y el objetivo
+MODEL_SIZE = config.MODEL_SIZE #tamaño de los landmarks small/large
+SOURCE_IMAGE = config.SOURCE_IMAGE
+ROOT_FOLDER_PATH = config.ROOT_FOLDER_PATH
+EXTENSION = config.EXTENSION
 
 MONTHS = [
     '01 - Enero',
